@@ -4,11 +4,41 @@ import { isAuthenticated } from "../auth";
 import { read } from "./apiUser";
 import DefaultProfileImage from "../assets/avatar.jpeg"
 import DeleteUser from './DeleteUser';
+import FollowProfileButton from './followProfileButton';
 
 class Profile extends Component {
   state = {
-    user: {},
-    redirectToSignup: false
+    user: {
+      following: [],
+      followers: [],
+    },
+    redirectToSignup: false,
+    following: false,
+  }
+
+  checkFollow = user => {
+    const jwt = isAuthenticated();
+    const match = user.followers.find(follower => {
+      return follower._id === jwt.user._id;
+    });
+    return match;
+  }
+
+  clickFollowButton = (callApi) => {
+    const userId = isAuthenticated().user._id;
+    const token = isAuthenticated().token;
+
+    callApi(userId, token, this.state.user._id)
+      .then(data => {
+        if (data.error) {
+          this.setState({ error: data.error });
+        } else {
+          this.setState({
+            user: data,
+            following: !this.state.following
+          })
+        }
+      })
   }
 
   init = (userId) => {
@@ -18,14 +48,14 @@ class Profile extends Component {
         if (data.error) {
           this.setState({ redirectToSignup: true })
         } else {
+          const following = data
           this.setState({
-            user: data
+            user: data,
+            following
           })
         }
       })
   }
-
-
 
   componentDidMount() {
     const userId = this.props.match.params.userId;
@@ -58,16 +88,21 @@ class Profile extends Component {
               <p>Email: {user.email}</p>
               <p>{`Joined: ${user ? new Date(user.created).toDateString() : null}`}</p>
             </div>
-            {isAuthenticated().user && isAuthenticated().user._id === user._id && (
+            {isAuthenticated().user && isAuthenticated().user._id === user._id ? (
             <div className="d-inline-block">
               <Link 
-                className="btn btn-raised btn-success mr-5"
+                className="d-inline-block btn btn-raised btn-success"
                 to={`/user/edit/${user._id}`}
               >
                 Edit Profile
               </Link>
-              <DeleteUser id={user._id} />
+              <DeleteUser className="d-inlne-block" id={user._id} />
             </div>
+            ) : (
+              <FollowProfileButton 
+                following={this.state.following}
+                onButtonClick={this.clickFollowButton}
+              />
             )}
           </div>
         </div>
