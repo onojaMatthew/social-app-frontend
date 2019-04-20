@@ -5,6 +5,7 @@ import { read } from "./apiUser";
 import DefaultProfileImage from "../assets/avatar.jpeg"
 import DeleteUser from './DeleteUser';
 import FollowProfileButton from './followProfileButton';
+import ProfileTabs from './ProfileTabs';
 
 class Profile extends Component {
   state = {
@@ -14,13 +15,14 @@ class Profile extends Component {
     },
     redirectToSignup: false,
     following: false,
+    error: "",
   }
 
   checkFollow = user => {
     const jwt = isAuthenticated();
     const match = user.followers.find(follower => {
       return follower._id === jwt.user._id;
-    });
+    })
     return match;
   }
 
@@ -48,7 +50,7 @@ class Profile extends Component {
         if (data.error) {
           this.setState({ redirectToSignup: true })
         } else {
-          const following = data
+          const following = this.checkFollow(data)
           this.setState({
             user: data,
             following
@@ -91,12 +93,12 @@ class Profile extends Component {
             {isAuthenticated().user && isAuthenticated().user._id === user._id ? (
             <div className="d-inline-block">
               <Link 
-                className="d-inline-block btn btn-raised btn-success"
+                className="btn btn-raised btn-success"
                 to={`/user/edit/${user._id}`}
               >
                 Edit Profile
               </Link>
-              <DeleteUser className="d-inlne-block" id={user._id} />
+              <DeleteUser id={user._id} />
             </div>
             ) : (
               <FollowProfileButton 
@@ -112,6 +114,10 @@ class Profile extends Component {
             <hr />
             <p className="lead">{user.about}</p>
             <hr />
+            <ProfileTabs 
+              followers={user.followers}
+              following={user.following}
+            />
           </div>
         </div>
       </div>
