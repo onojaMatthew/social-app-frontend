@@ -14,6 +14,7 @@ class NewPost extends Component {
     user: {},
     fileSize: 0,
     loading: false,
+    redirectToProfile: false,
   }
 
   componentDidMount() {
@@ -60,29 +61,30 @@ class NewPost extends Component {
         .then(data => {
           if (data.error) this.setState({ error: data.error });
           else
-            console.log("New post: ", data);
+          this.setState({ 
+            loading: false, 
+            title: "", 
+            body: "", 
+            photo: "",
+            redirectToProfile: true,
+          });
         });
     }
   }
 
   render() {
-    const { title, body, redirectToProfile, photo, loading, error } = this.state;
-    // if (redirectToProfile) {
-    //   return <Redirect to={`/user/${id}`} />
-    // }
+    const { title, body, redirectToProfile, user, loading, error } = this.state;
+    if (redirectToProfile) {
+      return <Redirect to={`/user/${user._id}`} />
+    }
 
-    //const photoUrl = id ? `${process.env.REACT_APP_API_URL}/user/photo/${id}?${new Date().getTime()}` : DefaultProfileImage;
+    
     return (
       <div className="container">
         <h2 className="mt-5 mb-5">Edit Profile</h2>
         <div className="alert alert-danger" style={{ display: error ? "" : "none"}}>{error}</div>
         {loading ? <div className="jumbotron text-center"><h2>Loading...</h2></div> : ""}
-        {/* <img 
-          style={{ height: 200, widht: "auth" }} 
-          src={photoUrl} alt="user avartar"
-          onError={i => i.target.src = `${DefaultProfileImage}`}
-          className="img-thumbnail"
-        /> */}
+        
         <NewPostForm 
           handleChange={this.handleChange}
           clickSubmit={this.clickSubmit}
