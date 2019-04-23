@@ -57,7 +57,7 @@ export const remove = (postId, token) => {
     .then(response => response.json());
 }
 
-export const update = (postId, token, post) => {
+export const updatePost = (postId, token, post) => {
   return fetch(`${process.env.REACT_APP_API_URL}/post/${postId}`, {
     method: "PUT",
     headers: {

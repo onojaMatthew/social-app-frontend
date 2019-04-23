@@ -3,7 +3,7 @@ import { isAuthenticated } from "../auth";
 import { Redirect } from 'react-router-dom';
 import DefaultProfileImage from "../assets/avatar.jpeg";
 import NewPostForm from './NewPostForm';
-import { update } from './apiPost';
+import { create } from './apiPost';
 
 class NewPost extends Component {
   state = {
@@ -55,9 +55,9 @@ class NewPost extends Component {
     event.preventDefault();
     this.setState({ loading: true });
     if (this.isValid()) {
-      const postId = this.state.id;
+      const userId = isAuthenticated().user._id;
       const token = isAuthenticated().token;
-      update(postId, token, this.postData)
+      create(userId, token, this.postData)
         .then(data => {
           if (data.error) this.setState({ error: data.error });
           else
