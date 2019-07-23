@@ -34,7 +34,7 @@ class Signin extends Component {
     //console.log(user);
     signin(user)
       .then(data => {
-      if (data.error) {
+      if (data && data.error) {
         this.setState({ error: data.error, loading: false })
       } else {
           authenticate(data, () => {

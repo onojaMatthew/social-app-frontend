@@ -5,6 +5,7 @@ import DefaultProfileImage from "../assets/avatar.jpeg";
 
 const FindPeopleList = ({ users, clickFollow }) => (
   <div className="row">
+    {!users.length ? (<p className="text-center">People list is empty...</p>) : null}
     {users && users.map((user, i) => (
     <div key={i} className="card col-md-4">
       <img 
@@ -20,7 +21,7 @@ const FindPeopleList = ({ users, clickFollow }) => (
         <Link to={`/user/${user._id}`} className="btn btn-raised btn-sm btn-primary btn-sm">View Profile</Link>
         <button 
           className="btn btn-info btn-raised float-right btn-sm"
-          onClick={clickFollow(user, i)}
+          // onClick={clickFollow(user, i)}
         >Follow</button>
       </div>
     </div>

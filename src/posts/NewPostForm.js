@@ -29,7 +29,7 @@ const NewPostForm = ({ title, body, clickSubmit, handleChange }) => (
           value={body}
         />
       </div>
-      <button onClick={clickSubmit} className="btn btn-raised btn-primary">Update Profile</button>
+      <button onClick={clickSubmit} className="btn btn-raised btn-primary">Create</button>
     </form>
   </div>
 );

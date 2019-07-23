@@ -16,6 +16,7 @@ class Users extends Component {
     const token = isAuthenticated().token;
     findPeople(userId, token)
       .then(data => {
+        console.log(data, " from component did mount")
         if (data.error) {
         } else {
           this.setState({ users: data });
@@ -44,8 +45,10 @@ class Users extends Component {
         }
       });
   }
+
   render(){
     const { users, followMessage, open } = this.state;
+    console.log(users, " from find people")
     return (
       <div className="container">
         <h2 className="mt-5 mb-5">Find People</h2>

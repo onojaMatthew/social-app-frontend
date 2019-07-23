@@ -1,4 +1,5 @@
 export const create = (userId, token, post) => {
+  console.log(post, " post photo")
   return fetch(`${process.env.REACT_APP_API_URL}/post/new/${userId}`, {
     method: "POST",
     headers: {

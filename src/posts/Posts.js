@@ -19,10 +19,11 @@ class Posts extends Component {
   }
   render(){
     const { posts } = this.state;
+    console.log(posts)
     return (
       <div className="container">
         <h2 className="mt-5 mb-5">
-          {!posts.length ? "Loading..." : "Recent Posts"}
+          {!posts.length ? "Posts list is empty. Consider creating posts" : "Recent Posts"}
         </h2>
         <PostList posts={posts} />
       </div>

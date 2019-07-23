@@ -41,6 +41,7 @@ class EditPost extends Component {
   handleChange = name => event => {
     this.setState({ error: "" });
     const value = name === "photo" ? event.target.files[0] : event.target.value;
+    console.log(value, " value from editpost")
     const fileSize = name === "photo" ? event.target.files[0].size : 0
     this.postData.set(name, value);
     this.setState({ [name]: value, fileSize });
